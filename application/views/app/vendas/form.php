@@ -130,7 +130,7 @@
             </button>
         </div>
         <div class="col s2 right-align">
-            <a href="<?php echo base_url() ?>clientes" class="red lighten-1 waves-effect waves-light btn">Cancelar</a>
+            <a href="<?php echo base_url() ?>vendas" class="red lighten-1 waves-effect waves-light btn">Cancelar</a>
         </div>
     </div>
 
