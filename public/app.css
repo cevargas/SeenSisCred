@@ -20,3 +20,7 @@ main {
 .tabs .indicator {
     background-color: #bbdefb !important;
 }
+
+.padding-valor-total {
+    padding-top: 15px !important;
+}

@@ -89,6 +89,11 @@
                 APP.formValidateClientes();
                 APP.formatter();
                 APP.processTab();
+                APP.processVendas();
+                APP.addLinhaProduto();
+                APP.removeLinhaProduto();
+                APP.vendaPrazo();
+                APP.calcularPrestacoes();
                 
                 <?php 
                     if($this->session->flashdata('success_msg') != NULL) :

@@ -238,8 +238,7 @@
             <div class="col s2 right-align">
                 <a href="<?php echo base_url() ?>clientes" class="red lighten-1 waves-effect waves-light btn">Cancelar</a>
             </div>
-        </div>
-  
+        </div>  
     </div>
 
     <input id="id" name="id" type="hidden" value="<?php echo (isset($cliente)) ? $cliente['id'] : null;?>">
