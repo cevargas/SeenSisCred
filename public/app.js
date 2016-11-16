@@ -1,6 +1,6 @@
 /*
  * Modulo js da aplicacao
- * Inicializa componentes do Materialize
+ * Inicializa componentes do Materialize e outros recursos
  */
 var APP = function () {
 
@@ -17,7 +17,7 @@ var APP = function () {
         });
     };
 
-    var select = function () {
+    var selectMaterial = function () {
         $('select').material_select();
     };
 
@@ -168,7 +168,7 @@ var APP = function () {
                 var id = $(this).val();  
                 $.ajax({
                     type: "POST",
-                    url: '../produtos/getProduto',
+                    url: baseUrl + 'produtos/getProduto',
                     data: {id: id},
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
@@ -213,33 +213,32 @@ var APP = function () {
     var addLinhaProduto = function(){
         
         $(document.body).off('click', ".addLinha").on('click', ".addLinha", function(){
-            
-            var idLinha = $(this).closest('div').parent('div').data('linha'); 
-            var btnRemove = null;
-            if(idLinha === 1) {
-                btnRemove = '<a href="javascript:;" class="removeLinha"><i class="material-icons">delete</i></a>';
-            }            
-            
+ 
             //destroi o select do material
             $('select').material_select('destroy');
             
-            var element = $(this).closest('div').parent('div').last();            
+            //var element = $(this).closest('div').parent('div').last();            
             //var totalLinha = $(document.body).find("div.linhaadd").length;            
-            var elementsLinha = $(document.body).find("[data-linha]").last();
-            
-            var elementsLinhaCount = $(document.body).find("[data-linha]");            
+            var elementsLinha = $(document.body).find("[data-linha]").last();            
+            var elementsLinhaCount = $(document.body).find("[data-linha]");    
+	       
             var totalLinha = 0;
             $(elementsLinhaCount).each(function(k, v){
                 k = k + 1;
                 totalLinha = k;
             });
-     
-            $(element).clone().insertAfter(elementsLinha);
-            var newElement = $(document.body).find("[data-linha]").last();
-            var nextId = parseInt(totalLinha + 1);  
+			
+			var btnRemove = null;
+            if(totalLinha === 1) {
+                btnRemove = '<a href="javascript:;" class="removeLinha"><i class="material-icons">delete</i></a>';
+            } 			
 
+            $(elementsLinha).clone().insertAfter(elementsLinha);
+            var newElement = $(document.body).find("[data-linha]").last();
+            var nextId = parseInt(totalLinha + 1); 
+		
             $(newElement).attr('data-linha', nextId);
-            $(newElement).find('.produtos').attr('id', 'produtos'+nextId);            
+            $(newElement).find('.produtos').attr('id', 'produtos'+nextId).val('');            
             $(newElement).find('#quantidade'+totalLinha).attr('id', 'quantidade'+nextId).val('');
             $(newElement).find('#valor'+totalLinha).attr('id', 'valor'+nextId).val('');
             $(newElement).find('#total'+totalLinha).attr('id', 'total'+nextId).val('');
@@ -307,6 +306,10 @@ var APP = function () {
                 $("#btnCalcula").attr('disabled', true).val('');
                 $("#prestacoes").attr('disabled', true).val('');
                 $("#diapagto").attr('disabled', true).val('');
+				
+				$("#table-prestacoes").addClass('hide');		
+				var $tbody = $("#tbody-prestacoes");
+				$tbody.children('tr').remove();	
             }            
         });
     };
@@ -320,7 +323,34 @@ var APP = function () {
                 
             //se tiver valor total
             if(totalGeral && prestacoes && diapagto) {
-                //aqui tem que calcular e gerar prestacoes na tabela
+                //aqui tem que calcular e gerar prestacoes na tabela					
+				$("#table-prestacoes").removeClass('hide');				
+				var $tbody = $("#tbody-prestacoes");
+				$tbody.children('tr').remove();				
+							
+				var valorpres = (totalGeral / prestacoes);
+				
+				var html = '';
+				for(var i = 1; i <= prestacoes; i++){
+					
+					var d = new Date();
+					d.setDate(diapagto);
+					d.setMonth( (d.getMonth() + i ) );					
+					d.setYear(d.getFullYear());
+										
+					html += '<tr>';
+						html += '<td>';
+							html += d.toLocaleDateString();
+						html += '</td>';		
+						
+						html += '<td>';
+							html += parseFloat(valorpres.toFixed(2));
+						html += '</td>';			
+					html += '</tr>';
+				}
+				
+				$tbody.append(html);	
+				
             }
             else {
                 Materialize.toast('Nada para calcular', 4000);
@@ -329,19 +359,21 @@ var APP = function () {
     };
 
     return {
-        dropdown: dropdown,
-        sideNav: sideNav,
-        select: select,
-        datepicker: datepicker,
-        tabs: tabs,
-        defaultValidator: defaultValidator,
-        formValidateClientes: formValidateClientes,
-        formatter: formatter,
-        processTab: processTab,
-        processVendas: processVendas,
-        addLinhaProduto: addLinhaProduto,
-        removeLinhaProduto: removeLinhaProduto,
-        vendaPrazo: vendaPrazo,
-        calcularPrestacoes: calcularPrestacoes
+		init: function() {
+			dropdown(),
+			sideNav(),
+			selectMaterial(),
+			datepicker(),
+			tabs(),
+			defaultValidator(),
+			formValidateClientes(),
+			formatter(),
+			processTab(),
+			processVendas(),
+			addLinhaProduto(),
+			removeLinhaProduto(),
+			vendaPrazo(),
+			calcularPrestacoes()
+		}
     };
 }($);

@@ -22,12 +22,12 @@
                     foreach ($vendas as $venda) :
                         ?>
                         <tr>
-                            <td><?php echo $venda['nome'].' '.$venda['sobrenome']; ?></td>
+                            <td><?php echo $venda['nome_cliente'].' '.$venda['sobrenome_cliente']; ?></td>
                             <td><?php echo $venda['data_compra']; ?></td>
                             <td align="right">R$ <?php echo number_format($venda['valor_total'], 2, ',', '.'); ?></td>
                             <td>
-                                <a href="<?php echo base_url()?>vendas/edit/<?php echo $venda['id']?>">Editar</a> |
-                                <a href="<?php echo base_url()?>vendas/delete/<?php echo $venda['id']?>">Excluir</a>
+                                <a href="<?php echo base_url()?>vendas/edit/<?php echo $venda['id_venda']?>">Editar</a> |
+                                <a href="<?php echo base_url()?>vendas/relatorio/<?php echo $venda['id_venda']?>">Relatório</a>
                             </td>
                         </tr>
                         <?php

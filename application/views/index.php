@@ -80,20 +80,10 @@
         <script type="text/javascript" src="<?php echo base_url() ?>public/app.js"></script>
         <script>
             $(document).ready(function(){
-                APP.dropdown();
-                APP.sideNav();
-                APP.select();
-                APP.datepicker();
-                APP.tabs();
-                APP.defaultValidator();
-                APP.formValidateClientes();
-                APP.formatter();
-                APP.processTab();
-                APP.processVendas();
-                APP.addLinhaProduto();
-                APP.removeLinhaProduto();
-                APP.vendaPrazo();
-                APP.calcularPrestacoes();
+				
+				baseUrl = '<?php echo base_url()?>';
+				
+                APP.init();
                 
                 <?php 
                     if($this->session->flashdata('success_msg') != NULL) :
