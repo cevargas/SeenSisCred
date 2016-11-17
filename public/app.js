@@ -155,149 +155,149 @@ var APP = function () {
 
     var processVendas = function () {
 
-        $(document.body).off('change', ".produtos").on('change', ".produtos", function(){
+        $(document.body).off('change', ".produtos").on('change', ".produtos", function () {
 
-            var idLinha = $(this).closest('div').parent('div').parent('div').data('linha');   
-            
-            $("#valor"+idLinha).val('');
-            $("#quantidade"+idLinha).val('');
-            $("#total"+idLinha).val('');
+            var idLinha = $(this).closest('div').parent('div').parent('div').data('linha');
+
+            $("#valor" + idLinha).val('');
+            $("#quantidade" + idLinha).val('');
+            $("#total" + idLinha).val('');
             //$("#totalgeral").val('');
-            
-            if($(this).val()) {             
-                var id = $(this).val();  
+
+            if ($(this).val()) {
+                var id = $(this).val();
                 $.ajax({
                     type: "POST",
                     url: baseUrl + 'produtos/getProduto',
                     data: {id: id},
                     dataType: "json",
                     success: function (data, textStatus, jqXHR) {
-                        $("#valor"+idLinha).val(data.valor);
-                        Materialize.updateTextFields();         
+                        $("#valor" + idLinha).val(data.valor);
+                        Materialize.updateTextFields();
                     },
-                    error: function (jqXHR, textStatus, errorThrown)  {
-                        Materialize.toast('Ocorreu um problema :S', 4000);		
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Materialize.toast('Ocorreu um problema :S', 4000);
                     }
                 });
             }
         });
 
-        $(document.body).off('change', ".qtdchange").on('change', ".qtdchange", function(){
-      
-            var idLinha = $(this).closest('div').parent('div').data('linha'); 
-            
-            if($(this).val()) {                      
+        $(document.body).off('change', ".qtdchange").on('change', ".qtdchange", function () {
+
+            var idLinha = $(this).closest('div').parent('div').data('linha');
+
+            if ($(this).val()) {
                 var totalLinha = Number($(this).val());
-                var valorLinha = Number($("#valor"+idLinha).val());
+                var valorLinha = Number($("#valor" + idLinha).val());
                 var calc = parseFloat(totalLinha * valorLinha);
-         
-                $("#total"+idLinha).val(calc.toFixed(2));
+
+                $("#total" + idLinha).val(calc.toFixed(2));
 
                 var elementsLinha = $(document.body).find("[data-linha]");
                 var totalGeral = 0;
-                $(elementsLinha).find(".totalitem").each(function(){
+                $(elementsLinha).find(".totalitem").each(function () {
                     totalGeral += parseFloat($(this).val());
                 });
 
                 $("#totalgeral").val(totalGeral.toFixed(2));
             }
             else {
-                $("#total"+idLinha).val('');
+                $("#total" + idLinha).val('');
                 $("#totalgeral").val('');
             }
- 
-            Materialize.updateTextFields();            
+
+            Materialize.updateTextFields();
         });
     };
-    
-    var addLinhaProduto = function(){
-        
-        $(document.body).off('click', ".addLinha").on('click', ".addLinha", function(){
- 
+
+    var addLinhaProduto = function () {
+
+        $(document.body).off('click', ".addLinha").on('click', ".addLinha", function () {
+
             //destroi o select do material
             $('select').material_select('destroy');
-            
+
             //var element = $(this).closest('div').parent('div').last();            
             //var totalLinha = $(document.body).find("div.linhaadd").length;            
-            var elementsLinha = $(document.body).find("[data-linha]").last();            
-            var elementsLinhaCount = $(document.body).find("[data-linha]");    
-	       
+            var elementsLinha = $(document.body).find("[data-linha]").last();
+            var elementsLinhaCount = $(document.body).find("[data-linha]");
+
             var totalLinha = 0;
-            $(elementsLinhaCount).each(function(k, v){
+            $(elementsLinhaCount).each(function (k, v) {
                 k = k + 1;
                 totalLinha = k;
             });
-			
-			var btnRemove = null;
-            if(totalLinha === 1) {
+
+            var btnRemove = null;
+            if (totalLinha === 1) {
                 btnRemove = '<a href="javascript:;" class="removeLinha"><i class="material-icons">delete</i></a>';
-            } 			
+            }
 
             $(elementsLinha).clone().insertAfter(elementsLinha);
             var newElement = $(document.body).find("[data-linha]").last();
-            var nextId = parseInt(totalLinha + 1); 
-		
+            var nextId = parseInt(totalLinha + 1);
+
             $(newElement).attr('data-linha', nextId);
-            $(newElement).find('.produtos').attr('id', 'produtos'+nextId).val('');            
-            $(newElement).find('#quantidade'+totalLinha).attr('id', 'quantidade'+nextId).val('');
-            $(newElement).find('#valor'+totalLinha).attr('id', 'valor'+nextId).val('');
-            $(newElement).find('#total'+totalLinha).attr('id', 'total'+nextId).val('');
-            $(newElement).find('label[for="quantidade'+ totalLinha +'"]').attr('for', 'quantidade'+nextId);
-            $(newElement).find('label[for="valor'+ totalLinha +'"]').attr('for', 'valor'+nextId);
-            $(newElement).find('label[for="total'+ totalLinha +'"]').attr('for', 'total'+nextId);
-            
-            if(btnRemove) {
-                $(newElement).find('.addLinha').after(btnRemove);       
+            $(newElement).find('.produtos').attr('id', 'produtos' + nextId).val('');
+            $(newElement).find('#quantidade' + totalLinha).attr('id', 'quantidade' + nextId).val('');
+            $(newElement).find('#valor' + totalLinha).attr('id', 'valor' + nextId).val('');
+            $(newElement).find('#total' + totalLinha).attr('id', 'total' + nextId).val('');
+            $(newElement).find('label[for="quantidade' + totalLinha + '"]').attr('for', 'quantidade' + nextId);
+            $(newElement).find('label[for="valor' + totalLinha + '"]').attr('for', 'valor' + nextId);
+            $(newElement).find('label[for="total' + totalLinha + '"]').attr('for', 'total' + nextId);
+
+            if (btnRemove) {
+                $(newElement).find('.addLinha').after(btnRemove);
             }
 
             //recria o select do material  
             $('select').material_select();
         });
     };
-    
-    var removeLinhaProduto = function(){
-        $(document.body).off('click', ".removeLinha").on('click', ".removeLinha", function(){
+
+    var removeLinhaProduto = function () {
+        $(document.body).off('click', ".removeLinha").on('click', ".removeLinha", function () {
 
             //remove linha 
             $(this).closest('div').parent('div').remove();
-            
+
             //reset os ids
             var elementsLinha = $(document.body).find("[data-linha]");
             var totalGeral = 0;
-            $(elementsLinha).each(function(k, v){  
+            $(elementsLinha).each(function (k, v) {
 
                 k = k + 1;//inicializa as linhas em 1   
                 $(this).attr('data-linha', k);
-                $(this).find('.produtos').attr('id', 'produtos'+k);
+                $(this).find('.produtos').attr('id', 'produtos' + k);
 
-                $(this).find('input[name="quantidade[]"]').attr('id', 'quantidade'+k);
-                $(this).find('input[name="valor[]"]').attr('id', 'valor'+k);
-                $(this).find('input[name="total[]"]').attr('id', 'total'+k);
+                $(this).find('input[name="quantidade[]"]').attr('id', 'quantidade' + k);
+                $(this).find('input[name="valor[]"]').attr('id', 'valor' + k);
+                $(this).find('input[name="total[]"]').attr('id', 'total' + k);
 
-                $(this).find('input[name="quantidade[]"]').next().attr('for', 'quantidade'+k);
-                $(this).find('input[name="valor[]"]').next().attr('for', 'valor'+k);
-                $(this).find('input[name="total[]"]').next().attr('for', 'total'+k);
+                $(this).find('input[name="quantidade[]"]').next().attr('for', 'quantidade' + k);
+                $(this).find('input[name="valor[]"]').next().attr('for', 'valor' + k);
+                $(this).find('input[name="total[]"]').next().attr('for', 'total' + k);
             });
 
             //recalcula total geral
-            $(elementsLinha).find(".totalitem").each(function(){
-                if($(this).val()) {
+            $(elementsLinha).find(".totalitem").each(function () {
+                if ($(this).val()) {
                     totalGeral += parseFloat($(this).val());
                 }
-            });      
+            });
 
-            if(totalGeral) {
+            if (totalGeral) {
                 //set total            
                 $("#totalgeral").val(totalGeral.toFixed(2));
-            } 
-            
+            }
+
             Materialize.updateTextFields();
-        });               
+        });
     };
-    
-    var vendaPrazo = function(){
-        $("input[name='formapagto']").on("click", function(){            
-            if($(this).val() === '2') {
+
+    var vendaPrazo = function () {
+        $("input[name='formapagto']").on("click", function () {
+            if ($(this).val() === '2') {
                 $("#btnCalcula").removeAttr('disabled');
                 $("#prestacoes").removeAttr('disabled');
                 $("#diapagto").removeAttr('disabled');
@@ -306,74 +306,74 @@ var APP = function () {
                 $("#btnCalcula").attr('disabled', true).val('');
                 $("#prestacoes").attr('disabled', true).val('');
                 $("#diapagto").attr('disabled', true).val('');
-				
-				$("#table-prestacoes").addClass('hide');		
-				var $tbody = $("#tbody-prestacoes");
-				$tbody.children('tr').remove();	
-            }            
+
+                $("#table-prestacoes").addClass('hide');
+                var $tbody = $("#tbody-prestacoes");
+                $tbody.children('tr').remove();
+            }
         });
     };
-    
-    var calcularPrestacoes = function(){
-        $("#btnCalcula").on("click", function(){
-            
+
+    var calcularPrestacoes = function () {
+        $("#btnCalcula").on("click", function () {
+
             var totalGeral = $("#totalgeral").val();
             var prestacoes = $("#prestacoes").val();
             var diapagto = $("#diapagto").val();
-                
+
             //se tiver valor total
-            if(totalGeral && prestacoes && diapagto) {
+            if (totalGeral && prestacoes && diapagto) {
                 //aqui tem que calcular e gerar prestacoes na tabela					
-				$("#table-prestacoes").removeClass('hide');				
-				var $tbody = $("#tbody-prestacoes");
-				$tbody.children('tr').remove();				
-							
-				var valorpres = (totalGeral / prestacoes);
-				
-				var html = '';
-				for(var i = 1; i <= prestacoes; i++){
-					
-					var d = new Date();
-					d.setDate(diapagto);
-					d.setMonth( (d.getMonth() + i ) );					
-					d.setYear(d.getFullYear());
-										
-					html += '<tr>';
-						html += '<td>';
-							html += d.toLocaleDateString();
-						html += '</td>';		
-						
-						html += '<td>';
-							html += parseFloat(valorpres.toFixed(2));
-						html += '</td>';			
-					html += '</tr>';
-				}
-				
-				$tbody.append(html);	
-				
+                $("#table-prestacoes").removeClass('hide');
+                var $tbody = $("#tbody-prestacoes");
+                $tbody.children('tr').remove();
+
+                var valorpres = (totalGeral / prestacoes);
+
+                var html = '';
+                for (var i = 1; i <= prestacoes; i++) {
+
+                    var d = new Date();
+                    d.setDate(diapagto);
+                    d.setMonth((d.getMonth() + i));
+                    d.setYear(d.getFullYear());
+
+                    html += '<tr>';
+                    html += '<td>';
+                    html += d.toLocaleDateString();
+                    html += '</td>';
+
+                    html += '<td>';
+                    html += 'R$ '+ parseFloat(valorpres.toFixed(2));
+                    html += '</td>';
+                    html += '</tr>';
+                }
+
+                $tbody.append(html);
+
             }
             else {
                 Materialize.toast('Nada para calcular', 4000);
-            }            
+            }
         });
     };
 
     return {
-		init: function() {
-			dropdown(),
-			sideNav(),
-			selectMaterial(),
-			datepicker(),
-			tabs(),
-			defaultValidator(),
-			formValidateClientes(),
-			formatter(),
-			processTab(),
-			processVendas(),
-			addLinhaProduto(),
-			removeLinhaProduto(),
-			vendaPrazo(),
-			calcularPrestacoes()
-		}
+        init: function () {
+            dropdown(),
+                    sideNav(),
+                    selectMaterial(),
+                    datepicker(),
+                    tabs(),
+                    defaultValidator(),
+                    formValidateClientes(),
+                    formatter(),
+                    processTab(),
+                    processVendas(),
+                    addLinhaProduto(),
+                    removeLinhaProduto(),
+                    vendaPrazo(),
+                    calcularPrestacoes()
+        }
     };
 }($);

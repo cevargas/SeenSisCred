@@ -79,12 +79,9 @@
 
         <script type="text/javascript" src="<?php echo base_url() ?>public/app.js"></script>
         <script>
-            $(document).ready(function(){
-				
-				baseUrl = '<?php echo base_url()?>';
-				
-                APP.init();
-                
+            $(document).ready(function(){				
+		baseUrl = '<?php echo base_url()?>';				
+                APP.init();                
                 <?php 
                     if($this->session->flashdata('success_msg') != NULL) :
                 ?>
