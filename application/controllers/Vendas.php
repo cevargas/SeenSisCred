@@ -214,5 +214,23 @@ class Vendas extends CI_Controller {
             }
         }
     }
-
+    
+    public function relatorio($id) {
+   
+        $data = [];
+        
+        //$id busca os dados do ID
+        
+        $html = '';
+        
+        $pdfFilePath = "output_pdf_name.pdf";
+ 
+        
+        //$this->load->library('m_pdf');
+ 
+       
+        $this->m_pdf->pdf->WriteHTML($html);
+ 
+        $this->m_pdf->pdf->Output($pdfFilePath, "D");
+    }
 }
