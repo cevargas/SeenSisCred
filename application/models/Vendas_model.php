@@ -18,13 +18,13 @@ class Vendas_model extends CI_Model {
 
         //$this->output->enable_profiler(TRUE);
 
-        $this->db->select("venda.id AS id_venda, 
-                            venda.forma_pagamento AS forma_pagamento, 
-                            venda.valor_total AS valor_total, 
+        $this->db->select("venda.id AS id_venda,
+                            venda.forma_pagamento AS forma_pagamento,
+                            venda.valor_total AS valor_total,
                             DATE_FORMAT(data_compra,'%d/%m/%Y') AS data_compra,
-                            cliente.id AS id_cliente, 
-                            cliente.nome AS nome_cliente, 
-                            cliente.sobrenome AS sobrenome_cliente, 
+                            cliente.id AS id_cliente,
+                            cliente.nome AS nome_cliente,
+                            cliente.sobrenome AS sobrenome_cliente,
                             funcionario.id AS id_funcionario,
                             funcionario.nome AS nome_funcionario,
                             funcionario.sobrenome AS sobrenome_funcionario");
@@ -46,17 +46,17 @@ class Vendas_model extends CI_Model {
 
         try {
 
-            if(isset($data['id'])) {                
+            if(isset($data['id'])) {
                 $this->db->where('id', $data['id']);
-                $this->db->update('venda', $data); 
+                $this->db->update('venda', $data);
             }
             else {
                 $this->db->insert('venda', $data);
                 return $this->db->insert_id();
-            }  
-            
+            }
+
             return true;
-            
+
         } catch (Exception $e) {
             log_message('error', $e->getMessage());
             return;
@@ -69,31 +69,31 @@ class Vendas_model extends CI_Model {
     public function saveItens($data) {
 
         try {
-            
-            if(isset($data['id'])) {                
+
+            if(isset($data['id'])) {
                 $this->db->where('id', $data['id']);
-                $this->db->update('itens_venda', $data); 
+                $this->db->update('itens_venda', $data);
             }
             else {
-                $this->db->insert('itens_venda', $data);                
+                $this->db->insert('itens_venda', $data);
             }
-            
+
             return true;
-            
+
         } catch (Exception $e) {
             log_message('error', $e->getMessage());
             return;
         }
     }
-    
+
     /**
      * Deleta os registros de pagamento
      * @param type $idVenda
      */
     public function deletePagamento($idVenda) {
-        //delete            
+        //delete
        $this->db->where('id_venda', $idVenda);
-       $this->db->delete('pagamento'); 
+       $this->db->delete('pagamento');
     }
 
     /**
@@ -101,11 +101,11 @@ class Vendas_model extends CI_Model {
      */
     public function savePagamento($data) {
 
-        try { 
-            
-            $this->db->insert('pagamento', $data);    
+        try {
+
+            $this->db->insert('pagamento', $data);
             return true;
-            
+
         } catch (Exception $e) {
             log_message('error', $e->getMessage());
             return;
@@ -117,15 +117,15 @@ class Vendas_model extends CI_Model {
      */
     public function getVenda($id) {
 
-        $this->db->select("venda.id AS id_venda, 
-                            venda.forma_pagamento AS forma_pagamento, 
-                            venda.valor_total AS valor_total, 
-                            venda.prestacoes AS prestacoes, 
-                            venda.diapagto AS diapagto, 
+        $this->db->select("venda.id AS id_venda,
+                            venda.forma_pagamento AS forma_pagamento,
+                            venda.valor_total AS valor_total,
+                            venda.prestacoes AS prestacoes,
+                            venda.diapagto AS diapagto,
                             DATE_FORMAT(data_compra,'%d/%m/%Y') AS data_compra,
-                            cliente.id AS id_cliente, 
-                            cliente.nome AS nome_cliente, 
-                            cliente.sobrenome AS sobrenome_cliente, 
+                            cliente.id AS id_cliente,
+                            cliente.nome AS nome_cliente,
+                            cliente.sobrenome AS sobrenome_cliente,
                             funcionario.id AS id_funcionario,
                             funcionario.nome AS nome_funcionario,
                             funcionario.sobrenome AS sobrenome_funcionario");
@@ -159,7 +159,7 @@ class Vendas_model extends CI_Model {
      */
     public function getItensVenda($id) {
 
-        $this->db->select("itens_venda.*");
+        $this->db->select("itens_venda.*, produto.nome AS produto_nome");
         $this->db->from('itens_venda');
         $this->db->join('venda', 'itens_venda.id_venda = venda.id');
         $this->db->join('produto', 'itens_venda.id_produto = produto.id');
